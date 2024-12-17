@@ -4,8 +4,9 @@
   "description": "dating app made for expo",
   "main": "index.js",
   "scripts": {
-    "test": "nodemon index.js",
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "npm run build",
+    "test": "nodemon index.js"
   },
   "author": "solo (ig ===> raj.oks)",
   "license": "ISC",
