@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dating Profile Registration</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 h-screen overflow-y-auto">
+   
+    <div class="w-full max-w-lg p-6 bg-white rounded-lg shadow-md mx-auto mt-10">
+        <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">Profile Registration</h1>
+       
+        <form method="post" action="/admin/register" enctype="multipart/form-data">
+           
+            <!-- Photo Upload -->
+            <div class="mb-4">
+                <label for="photo" class="block text-sm font-medium text-gray-700">Profile Photo</label>
+                <div id="photoPreview" class="mt-4 w-32 h-48 bg-gray-200 rounded-lg flex items-center justify-center text-gray-500 mx-auto">
+                    No photo uploaded
+                </div>
+                <input type="file" id="photo" name="pic" accept="image/*" 
+                       class="mt-2 block w-full text-gray-700 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+            </div>
+
+            <!-- Name -->
+            <div class="mb-4">
+                <label for="name" class="block text-sm font-medium text-gray-700">Full Name</label>
+                <input type="text" id="name" name="name" 
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                       placeholder="Enter your full name" required>
+            </div>
+
+            <!-- Age -->
+            <div class="mb-4">
+                <label for="age" class="block text-sm font-medium text-gray-700">Age</label>
+                <input type="number" id="age" name="age" 
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                       placeholder="Enter your age" min="18" required>
+            </div>
+
+            <!-- Gender -->
+            <div class="mb-4">
+                <label for="gender" class="block text-sm font-medium text-gray-700">Gender</label>
+                <select id="gender" name="gender" 
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" required>
+                    <option value="">Select your gender</option>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                </select>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-4">
+                <label for="email" class="block text-sm font-medium text-gray-700">Email</label>
+                <input type="email" id="email" name="email" 
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                       placeholder="Enter your email" required>
+            </div>
+
+            <!-- Instagram ID -->
+            <div class="mb-4">
+                <label for="insta_id" class="block text-sm font-medium text-gray-700">Instagram ID</label>
+                <input type="text" id="insta_id" name="insta" 
+                       class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                       placeholder="Enter your Instagram ID">
+            </div>
+
+            <!-- Description -->
+            <div class="mb-4">
+                <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
+                <textarea id="description" name="des" 
+                          class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                          placeholder="Write a short bio..." rows="3" required></textarea>
+            </div>
+
+            <!-- Username -->
+            <div class="mb-4 border-t border-gray-300 pt-4">
+                <label for="username" class="block text-sm font-medium text-gray-700">Username</label>
+                <input type="text" id="username" name="usern" 
+                       class="mt-1 block w-full px-3 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                       placeholder="Choose a username" required>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-4">
+                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="password" name="pass" 
+                       class="mt-1 block w-full px-3 py-2 border border-gray-700 bg-gray-800 text-white rounded-lg shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" 
+                       placeholder="Create a password" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" 
+                    class="w-full px-4 py-2 text-white bg-indigo-600 hover:bg-indigo-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">
+                Register
+            </button>
+        </form>
+
+        <!-- JavaScript -->
+        <script>
+            document.getElementById('photo').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                const photoPreview = document.getElementById('photoPreview');
+
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        photoPreview.style.backgroundImage = `url(${e.target.result})`;
+                        photoPreview.style.backgroundSize = 'cover';
+                        photoPreview.style.backgroundPosition = 'center';
+                        photoPreview.textContent = '';
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    photoPreview.style.backgroundImage = '';
+                    photoPreview.textContent = 'No photo uploaded';
+                }
+            });
+
+        </script>
+    </div>
+</body>
+</html>
