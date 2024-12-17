@@ -16,7 +16,7 @@ router.get('/main', isUser, async (req, res) => {
 
         const suff = profiles.sort(() => Math.random() - 0.5);
 
-        res.render('main', { profiles: suff });
+        res.render('main', { profiles: suff, check: false });
     }
     catch (err) {
         console.error('Error fetching profiles:\n', err);

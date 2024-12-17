@@ -6,7 +6,7 @@ const { isUser } = require('../middleware/session');
 
 
 
-router.get('/api/like', isUser, async (req, res) => {
+router.post('/api/like', isUser, async (req, res) => {
     const cId = req.session.isUser.id;
     const { lid } = req.body;
 
@@ -24,28 +24,44 @@ router.get('/api/like', isUser, async (req, res) => {
 
         if (!userMatchDoc.like.includes(lid)) {
             userMatchDoc.like.push(lid);
-            userMatchDoc.count = (parseInt(userMatchDoc.count) + 1).toString();
             await userMatchDoc.save();
         }
 
 
-        const likedUserMatchDoc = await match.findOne({ log_id: lid });
+        let likedUserMatchDoc = await match.findOne({ log_id: lid });
+
+        if (!likedUserMatchDoc) {
+            likedUserMatchDoc = await match.create({
+                log_id: lid,
+                like: [],
+                match: [],
+                count: "0"
+            });
+        }
+
+        likedUserMatchDoc.count = (parseInt(likedUserMatchDoc.count) + 1).toString();
+        await likedUserMatchDoc.save();
+
+
 
         if (likedUserMatchDoc && likedUserMatchDoc.like.includes(cId)) {
-            if (!userMatchDoc.match.includes(likedProfileId)) {
-                userMatchDoc.match.push(likedProfileId);
+            if (!userMatchDoc.match.includes(lid)) {
+                userMatchDoc.match.push(lid);
             }
 
-            if (!likedUserMatchDoc.match.includes(log_id)) {
-                likedUserMatchDoc.match.push(log_id);
+            if (!likedUserMatchDoc.match.includes(cId)) {
+                likedUserMatchDoc.match.push(cId);
             }
 
             await userMatchDoc.save();
             await likedUserMatchDoc.save();
 
-        }
+            res.status(200).json({ match: true, uimg: (await user.findOne({ log_id: cId }, 'photo').lean()).photo }); 
 
-        res.status(200).json({ match: false }); 
+        }
+        else{
+            res.status(200).json({ match: false }); 
+        }
     } 
     catch (error) {
         console.error(error);

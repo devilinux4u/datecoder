@@ -163,10 +163,105 @@
                 height: 550px;
             }
         }
+
+        /* Overlay */
+        .match-dialog-overlay {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(31, 41, 55, 0.75);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 50;
+        }
+
+        /* Dialog Box */
+        .match-dialog-box {
+            background-color: #ffffff;
+            border-radius: 0.5rem;
+            padding: 1.5rem;
+            width: 20rem;
+            position: relative;
+            text-align: center;
+        }
+
+        /* Close Button */
+        .match-dialog-close {
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            color: #6b7280;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 1.25rem;
+            transition: color 0.2s;
+        }
+
+        .match-dialog-close:hover {
+            color: #374151;
+        }
+
+        /* Title */
+        .match-dialog-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+        }
+
+        /* Content Section */
+        .match-dialog-content {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Profile Images */
+        .match-dialog-img {
+            width: 4rem;
+            height: 4rem;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Heart Icon */
+        .match-dialog-heart {
+            color: #ec4899;
+            font-size: 1.25rem;
+        }
+
+        /* Description Text */
+        .match-dialog-text {
+            color: #374151;
+            font-size: 1rem;
+        }
     </style>
 </head>
 
 <body>
+
+    <!-- matched dialoge -->
+    <!-- <% if(check){%> -->
+    <div class="match-dialog-overlay" id="match-dialog">
+        <div class="match-dialog-box">
+            <button class="match-dialog-close" id="close-dialog">
+                <i class="fas fa-times"></i>
+            </button>
+            <h2 class="match-dialog-title">It's a Match!</h2>
+            <div class="match-dialog-content">
+                <img alt="Your profile picture" class="match-dialog-img"
+                    src="https://storage.googleapis.com/a1aa/image/slvqUrEf3y0YEyuv4lP5bFg4QQcrm2XFWxfs5lkOAFLU7w7TA.jpg" />
+                <i class="fas fa-heart match-dialog-heart"></i>
+                <img alt="Your match's profile picture" class="match-dialog-img"
+                    src="https://storage.googleapis.com/a1aa/image/JI7AwJjEd7LuC9CwdZAAkdVjNfDufkJCeiyfmaLuWofcaHeeJA.jpg" />
+            </div>
+            <p class="match-dialog-text">You and [Match's Name] have liked each other.</p>
+        </div>
+    </div>
+    <!-- <%}%> -->
+
     <!-- Main swipe section -->
     <div id="swipe-section">
         <div class="container">
@@ -196,16 +291,17 @@
     </div>
 
     <div class="notification" id="notification"></div>
+    <div id="nth"></div>
 
     <script>
 
         let card = document.getElementById("current-card");
         let currentProfileIndex = 0;
-        let profiles = <% - JSON.stringify(profiles) %>;
+        let profiles = <%- JSON.stringify(profiles) %>;
 
 
         function updateCurrentCard() {
-            const currentProfile = profiles[currentProfileIndex];
+            currentProfile = profiles[currentProfileIndex];
             const card = document.getElementById("current-card");
 
             card.innerHTML = `
@@ -220,19 +316,51 @@
 
 
         function handleLike() {
-            fetch('/api/like', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ lid: currentProfile.log_id })
-            })
-                .then(response => response.json())
-                .then(data => {
-                    showNotification('Liked!');
-                    loadNextProfile();
+            if (!(currentProfileIndex >= profiles.length)) {
+                fetch('/api/like', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ lid: currentProfile.log_id })
                 })
-                .catch(error => console.error('Error:', error));
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.match) {
+
+                            document.getElementById('nth').innerHTML = `
+                                <div class="match-dialog-overlay" id="match-dialog">
+                                    <div class="match-dialog-box">
+                                        <button class="match-dialog-close" id="close-dialog">
+                                        <i class="fas fa-times"></i>
+                                        </button>
+                                        <h2 class="match-dialog-title">It's a Match!</h2>
+                                    <div class="match-dialog-content">
+                                        <img alt="Your profile picture" class="match-dialog-img"
+                                            src="${data.uimg}" />
+                                            <i class="fas fa-heart match-dialog-heart"></i>
+                                        <img alt="Your match's profile picture" class="match-dialog-img"
+                                            src="${currentProfile.photo}" />
+                                    </div>
+                                    <p class="match-dialog-text"><b>You</b> and <b>${currentProfile.name}</b> have liked each other.</p>
+                                    </div>
+                                </div>
+                            `;
+                            document.getElementById('close-dialog').addEventListener('click',close);
+
+                        } else {
+                            showNotification('Liked!');
+                        }
+                        loadNextProfile();
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        showNotification('Error Occured !');
+                    });
+            }
+            else {
+                showNotification('No more profiles');
+            }
         }
 
         function handleDislike() {
@@ -312,6 +440,12 @@
                     break;
             }
         }
+
+
+        function close() {
+            document.getElementById('match-dialog').style.display = 'none';
+        };
+
     </script>
 
 </body>

@@ -9,6 +9,7 @@ const adminlog = require('./routes/adminlog');
 const admin = require('./routes/admin');
 const userlog = require('./routes/userlog');
 const main = require('./routes/main');
+const match = require('./routes/match');
 
 
 app.set("view engine", "ejs");
@@ -23,7 +24,7 @@ app.use(
     })
 );
 
-app.use('/', adminlog, admin, userlog, main);
+app.use('/', adminlog, admin, userlog, main, match);
 
 app.get('*', (req, res) => {
     res.send('404 error page');
