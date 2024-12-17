@@ -186,7 +186,7 @@
         }
 
         /* Close Button */
-        .match-dialog-close {
+        .match-dialog-close, .match-dialog-close2 {
             position: absolute;
             top: 0.5rem;
             right: 0.5rem;
@@ -198,7 +198,7 @@
             transition: color 0.2s;
         }
 
-        .match-dialog-close:hover {
+        .match-dialog-close:hover, .match-dialog-close2:hover {
             color: #374151;
         }
 
@@ -243,7 +243,7 @@
 <body>
 
     <!-- matched dialoge -->
-    <!-- <% if(check){%> -->
+    <% if(check != null){%>
     <div class="match-dialog-overlay" id="match-dialog">
         <div class="match-dialog-box">
             <button class="match-dialog-close" id="close-dialog">
@@ -252,15 +252,15 @@
             <h2 class="match-dialog-title">It's a Match!</h2>
             <div class="match-dialog-content">
                 <img alt="Your profile picture" class="match-dialog-img"
-                    src="https://storage.googleapis.com/a1aa/image/slvqUrEf3y0YEyuv4lP5bFg4QQcrm2XFWxfs5lkOAFLU7w7TA.jpg" />
+                    src="<%= uimg %>" />
                 <i class="fas fa-heart match-dialog-heart"></i>
                 <img alt="Your match's profile picture" class="match-dialog-img"
-                    src="https://storage.googleapis.com/a1aa/image/JI7AwJjEd7LuC9CwdZAAkdVjNfDufkJCeiyfmaLuWofcaHeeJA.jpg" />
+                    src="<%= check.photo %>" />
             </div>
-            <p class="match-dialog-text">You and [Match's Name] have liked each other.</p>
+            <p class="match-dialog-text"><b>You</b> have a match with <b><%= check.name %></b> and <b><%= num.match.length-1 %></b> other.</p>
         </div>
     </div>
-    <!-- <%}%> -->
+    <%}%>
 
     <!-- Main swipe section -->
     <div id="swipe-section">
@@ -294,6 +294,12 @@
     <div id="nth"></div>
 
     <script>
+
+        <% if(check != null){%>
+            document.getElementById('close-dialog').addEventListener('click',()=>{
+                document.getElementById('match-dialog').style.display = 'none';
+            });
+        <%}%>;
 
         let card = document.getElementById("current-card");
         let currentProfileIndex = 0;
@@ -329,9 +335,9 @@
                         if (data.match) {
 
                             document.getElementById('nth').innerHTML = `
-                                <div class="match-dialog-overlay" id="match-dialog">
+                                <div class="match-dialog-overlay" id="match-dialog2">
                                     <div class="match-dialog-box">
-                                        <button class="match-dialog-close" id="close-dialog">
+                                        <button class="match-dialog-close2" id="close-dialog2">
                                         <i class="fas fa-times"></i>
                                         </button>
                                         <h2 class="match-dialog-title">It's a Match!</h2>
@@ -346,7 +352,9 @@
                                     </div>
                                 </div>
                             `;
-                            document.getElementById('close-dialog').addEventListener('click',close);
+                            document.getElementById('close-dialog2').addEventListener('click', ()=>{
+                                document.getElementById('match-dialog2').style.display = 'none';
+                            });
 
                         } else {
                             showNotification('Liked!');
@@ -441,10 +449,6 @@
             }
         }
 
-
-        function close() {
-            document.getElementById('match-dialog').style.display = 'none';
-        };
 
     </script>
 
