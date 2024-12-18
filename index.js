@@ -12,15 +12,17 @@ const main = require('./routes/main');
 const match = require('./routes/match');
 
 
+app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(session({ secret: 'itsAsecret' }));
 app.use(
     session({
         secret: process.env.secret_key,
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: false }
+        cookie: { secure: true }
     })
 );
 
