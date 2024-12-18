@@ -5,17 +5,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dating App</title>
+    <title>Date with Coder || main</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <style>
         * {
             margin: 0;
             padding: 0;
+            font-family: 'Roboto', sans-serif;
             box-sizing: border-box;
         }
 
         body {
-            font-family: Arial, sans-serif;
             background-color: #f5f5f5;
             padding-bottom: 70px;
             /* Space for navigation bar */
@@ -24,7 +25,13 @@
         .container {
             max-width: 400px;
             margin: 20px auto;
-            padding: 0 15px;
+            padding: 0 15px 60px 15px;
+        }
+
+        .container h1 {
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 0 10px 0;
         }
 
         .card-container {
@@ -43,7 +50,7 @@
             background: #fff;
             border-radius: 15px;
             overflow: hidden;
-            touch-action: none;
+            touch-action: pan-y;
             cursor: grab;
             transition: transform 0.3s ease-out;
         }
@@ -265,6 +272,7 @@
     <!-- Main swipe section -->
     <div id="swipe-section">
         <div class="container">
+            <h1>Discover</h1>
             <div class="card-container">
                 <div class="card" id="current-card">
                 </div>
@@ -286,7 +294,7 @@
     <!-- Navigation bar -->
     <div class="nav-bar">
         <i class="fas fa-user-friends nav-item active" onclick="switchSection('swipe')"></i>
-        <i class="fas fa-heart nav-item" onclick="switchSection('matches')"></i>
+        <i class="fas fa-heart nav-item mheart" onclick="switchSection('matches')"></i>
         <i class="fas fa-user nav-item" onclick="switchSection('profile')"></i>
     </div>
 
@@ -430,8 +438,8 @@
                     break;
                 case 'matches':
                     document.getElementById('matches-section').style.display = 'block';
-                    document.querySelector('.fa-heart').classList.add('active');
-                    fetch('/matches')
+                    document.querySelector('.mheart').classList.add('active');
+                    fetch('/viewmatch')
                         .then(response => response.text())
                         .then(html => {
                             document.getElementById('matches-section').innerHTML = html;
@@ -447,6 +455,22 @@
                         });
                     break;
             }
+        }
+
+        function closeChat() {
+            document.getElementById('chatModal').style.display = 'none';
+        }
+
+        function openChat(name, id) {
+            document.getElementById('chatUserName').innerText = `What Next ?`;
+            document.getElementById('chat-txt').innerHTML = `
+                    hi there! <br>
+                    <b>you</b> and <b>${name}</b> have matched, <br>
+                    both are informed of the match via mail. <br>
+                    add each other in instagram to start talking. <br>
+                    ${name}'s insta id is <b>${id}</b>
+            `;
+            document.getElementById('chatModal').style.display = 'flex';
         }
 
 

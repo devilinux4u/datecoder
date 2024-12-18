@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8" />
     <meta content="width=device-width, initial-scale=1.0" name="viewport" />
-    <title>View Profile</title>
+    <title>Date with Coder || Profile</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
     <style>
@@ -15,9 +15,9 @@
             padding: 0;
         }
 
-        .container {
+        .p-container {
             max-width: 400px;
-            margin: 10px auto;
+            margin: 20px auto 60px auto;
             padding: 0 15px;
         }
 
@@ -52,7 +52,7 @@
             background-color: #dc2626;
         }
 
-        .card-container {
+         .p-card-container {
             position: relative;
             height: 600px;
             background: #fff;
@@ -61,47 +61,47 @@
             overflow: hidden;
         }
 
-        .card {
+        .p-card {
             position: absolute;
             width: 100%;
             height: 100%;
             background: #fff;
             border-radius: 15px;
             overflow: hidden;
-            touch-action: none;
+            touch-action: pan-y;
             cursor: grab;
             transition: transform 0.3s ease-out;
-        }
+        } 
 
-        .card:active {
+        .p-card:active {
             cursor: grabbing;
         }
 
-        .card img {
+        .p-card img {
             width: 100%;
             height: 75%;
             object-fit: cover;
         }
 
-        .card-info {
+        .p-card-info {
             padding: 15px;
         }
 
-        .card-info h2 {
+        .p-card-info h2 {
             font-size: 24px;
             margin-bottom: 5px;
         }
 
-        .card-info p {
+        .p-card-info p {
             color: #666;
             font-size: 16px;
             margin-bottom: 5px;
-        }
+        } 
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="p-container">
         <div class="header">
             <h1>My Profile</h1>
             <form action="/userlogout" method="POST">
@@ -112,10 +112,10 @@
             </form>
         </div>
 
-        <div class="card-container">
-            <div class="card" id="current-card">
+        <div class="p-card-container">
+            <div class="p-card" id="current-card">
                 <img src="<%= profile.photo%>" alt="Profile Picture">
-                <div class="card-info">
+                <div class="p-card-info">
                     <h2>
                         <%= profile.name%>, <%= profile.age%>
                     </h2>

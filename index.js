@@ -20,7 +20,7 @@ app.use(
         secret: process.env.secret_key,
         resave: false,
         saveUninitialized: false,
-        cookie: { secure: true }
+        cookie: { secure: false }
     })
 );
 

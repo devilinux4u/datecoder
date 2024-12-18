@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const { user, match } = require('../db/db');
 const { isUser } = require('../middleware/session');
-
+const { mail } = require('../helpers/mailer');
 
 
 router.post('/api/like', isUser, async (req, res) => {
@@ -56,7 +56,13 @@ router.post('/api/like', isUser, async (req, res) => {
             await userMatchDoc.save();
             await likedUserMatchDoc.save();
 
-            res.status(200).json({ match: true, uimg: (await user.findOne({ log_id: cId }, 'photo').lean()).photo }); 
+            let u = await user.findOne({ log_id: cId }).lean();
+            let nu = await user.findOne({ log_id: lid }).lean();
+
+            res.status(200).json({ match: true, uimg: u.photo }); 
+
+            mail(u.email, nu);
+            mail(nu.email, u);
 
         }
         else{
@@ -68,6 +74,26 @@ router.post('/api/like', isUser, async (req, res) => {
         res.status(500).json({ error: 'An error occurred while processing the like.' });
     }
 })
+
+router.get('/viewmatch', isUser, async (req, res) => {
+    try {
+        const logId = req.session.isUser.id; 
+
+        const userMatches = await match.findOne({ log_id: logId }).lean();
+
+        if (!userMatches) {
+            res.render('viewmatch', {data: false, stat: {like: [], match: [], count: '0'}});
+        }
+        else{
+            const matchedUsers = await user.find({ log_id: { $in: userMatches.match } }).lean();
+            res.render('viewmatch', {data: true, stat: userMatches, match: matchedUsers});
+        }
+    } 
+    catch (error) {
+        console.error('Error fetching matches:\n', error);
+        res.status(500).send('Server Error while fetching matched profile');
+    }
+});
 
 
 module.exports = router;
