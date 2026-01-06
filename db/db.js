@@ -5,7 +5,8 @@ const models = require('./model');
 try {
     mongoose
         .connect(process.env.MONGODB_URI)
-        .then(() => console.log(`MongoDB connected Successfully..!`));
+        .then(() => console.log(`MongoDB connected Successfully..!`))
+}
 catch (error) {
     console.log(`MongoDB Error: `, error.message);
     process.exit(1);
