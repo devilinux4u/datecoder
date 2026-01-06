@@ -16,7 +16,7 @@ app.set("views", __dirname + "/views");
 app.set("view engine", "ejs");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({ secret: 'itsAsecret' }));
+app.use(session({ secret: 'soloisgolo' }));
 app.use(
     session({
         secret: process.env.secret_key,
